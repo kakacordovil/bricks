@@ -11,10 +11,10 @@ public enum GridDirection {
     RIGHT;
 
     public boolean isOpposite(GridDirection dir) {
-        return dir.equals(oppositeDirection());
+        return dir.equals(oppositeDirectionBricks());
     }
 
-    public GridDirection oppositeDirection() {
+    public GridDirection oppositeDirectionBricks() {
 
         GridDirection opposite = null;
 
@@ -68,6 +68,16 @@ public enum GridDirection {
         }
 
         return opposite;
+    }
+
+    public GridDirection oppositeDirectionTableLeft() {
+
+        return UP_LEFT;
+    }
+
+    public GridDirection oppositeDirectionTableRight() {
+
+        return UP_RIGHT;
     }
 
 }

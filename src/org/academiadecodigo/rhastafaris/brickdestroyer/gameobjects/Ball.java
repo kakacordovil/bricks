@@ -25,7 +25,7 @@ public class Ball {
 
         GridDirection newDirection = direction;
 
-        newDirection = newDirection.oppositeDirection();
+        newDirection = newDirection.oppositeDirectionBricks();
 
         return newDirection;
     }

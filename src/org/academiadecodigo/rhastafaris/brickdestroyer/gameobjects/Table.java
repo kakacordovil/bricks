@@ -20,7 +20,7 @@ public class Table implements KeyboardHandler {
     }
 
     public void move(GridDirection direction){
-        logicPosition.moveInDirection(direction, 1);
+        logicPosition.moveInDirection(direction, 3);
     }
 
     public LogicPosition getLogicPosition() {

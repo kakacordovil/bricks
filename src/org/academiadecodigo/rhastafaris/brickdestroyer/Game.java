@@ -1,12 +1,11 @@
 package org.academiadecodigo.rhastafaris.brickdestroyer;
 
 
+import org.academiadecodigo.rhashtafaris.linkedlist.LinkedList;
 import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Ball;
 import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Brick;
 import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Table;
 import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GraphicGrid;
-import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GridDirection;
-import org.academiadecodigo.rhastafaris.brickdestroyer.logicgrid.LinkedList;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
@@ -15,26 +14,22 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 
 public class Game implements KeyboardHandler {
 
-    private static int GRID_COLUMNS = 39;
+    private static int GRID_COLUMNS = 40;
     private static int GRID_ROWS = 30;
-    private static int DELAY = 200;
+    private static int DELAY = 100;
     private GraphicGrid grid;
     private Ball ball;
-    private Brick brick;
+    //private Brick brick;
     private Table[] table;
     private Brick[] bricks;
     private boolean youMove;
-    private LinkedList bricksList;
-    private LinkedList brickRows;
+    private LinkedList<Brick[]> bricksList;
     private boolean space = false;
 
 
     public Game() {
         this.grid = new GraphicGrid(GRID_COLUMNS, GRID_ROWS);
-
-        this.bricksList = new LinkedList();
         keyboardInit();
-
     }
 
     public void init() {
@@ -50,14 +45,20 @@ public class Game implements KeyboardHandler {
 
         this.table = new Table[]{t1, t2, t3, t4, t5};
 
+        this.bricksList = new LinkedList<>();
 
-        for (int i = 0; i < (GRID_COLUMNS / 3); i++) {
-            bricks = new Brick[3];
-            bricks[0] = new Brick(grid.makeGridPosition(i * 3, 10));
-            bricks[1] = new Brick(grid.makeGridPosition((i * 3) + 1, 10));
-            bricks[2] = new Brick(grid.makeGridPosition((i * 3) + 2, 10));
 
-            bricksList.addArray(bricks);
+        for (int z = 0; z < 8; z++) {
+            for (int i = 0; i < (GRID_COLUMNS / 5); i++) {
+                bricks = new Brick[5];
+                bricks[0] = new Brick(grid.makeGridPosition(i * 5, z));
+                bricks[1] = new Brick(grid.makeGridPosition((i * 5) + 1, z));
+                bricks[2] = new Brick(grid.makeGridPosition((i * 5) + 2, z));
+                bricks[3] = new Brick(grid.makeGridPosition((i * 5) + 3, z));
+                bricks[4] = new Brick(grid.makeGridPosition((i * 5) + 4, z));
+
+                bricksList.add(bricks);
+            }
         }
     }
 
@@ -67,7 +68,7 @@ public class Game implements KeyboardHandler {
         tableMove();
         int life = 3;
 
-        for (int i = 0; i < life; i++) {
+        while (true) {
 
             youMove = true;
             this.ball = new Ball(grid.makeGridPosition(20, 20));
@@ -78,9 +79,28 @@ public class Game implements KeyboardHandler {
 
                 Thread.sleep(DELAY);
 
-                if (isCrashedBricks()) {
-                    ball.setDirection(ball.getDirection().oppositeDirection());
+                if (isBallCollision()) {
+                    ball.setDirection(ball.getDirection().oppositeDirectionBricks());
                 }
+
+                // int index = isTableCollision();
+
+                if (isTableCollision()) {
+
+                    if (ball.getLogicPosition().getCol() < table[2].getLogicPosition().getCol()){
+                        ball.setDirection(ball.getDirection().oppositeDirectionTableLeft());
+
+                    }
+
+                    if (ball.getLogicPosition().getCol() > table[2].getLogicPosition().getCol()){
+                        ball.setDirection(ball.getDirection().oppositeDirectionTableRight());
+
+                    }
+
+                    ball.setDirection(ball.getDirection().oppositeDirectionBricks());
+
+                }
+
 
                 if (isCrashedWalls()) {
                     ball.setDirection(ball.getDirection().oppositeDirectionWall());
@@ -92,29 +112,27 @@ public class Game implements KeyboardHandler {
                 }
             }
 
-            if (i == (life - 1)) {
+            if (--life == 0) {
                 break;
             }
 
-            if (newGame()) {
-                continue;
-            }
+            newGame();
+
         }
 
     }
 
-    public boolean newGame() {
-
-        int i = 0;
+    public boolean newGame() throws InterruptedException {
 
         while (!space) {
-            System.out.println(i++);
+            Thread.sleep(DELAY);
         }
 
         space = false;
         return true;
 
     }
+
 
     private boolean isCrashedWalls() {
         for (int i = 0; i < bricksList.size(); i++) {
@@ -130,72 +148,92 @@ public class Game implements KeyboardHandler {
         return false;
     }
 
-    private boolean isCrashedBricks() {
-        for (int i = 0; i < bricksList.size(); i++) {
+    private boolean isTableCollision() {
+        for (int z = 0; z < table.length; z++) {
 
-            for (int z = 0; z < table.length; z++) {
-
-                if (ball.getLogicPosition().getRow() == table[z].getLogicPosition().getRow() - 1 &&
-                        ball.getLogicPosition().getCol() == table[z].getLogicPosition().getCol()) {
-
-                    return true;
-                }
-            }
-
-            /*if (ball.getLogicPosition().equal(table[0].getLogicPosition())) {  //reflex in table
-                return true;
-            } else if (ball.getLogicPosition().equal(table[1].getLogicPosition())) {
-                return true;
-            } else if (ball.getLogicPosition().equal(table[2].getLogicPosition())) {
-                return true;
-            } else if (ball.getLogicPosition().equal(table[3].getLogicPosition())) {
-                return true;
-            } else if (ball.getLogicPosition().equal(table[4].getLogicPosition())) {
-                return true;
-            } else */
-
-            if (ball.getLogicPosition().getRow() == 0) { //reflex in celing
+            if (ball.getLogicPosition().getRow() == table[z].getLogicPosition().getRow() - 1 &&
+                    ball.getLogicPosition().getCol() == table[z].getLogicPosition().getCol()) {
                 return true;
 
-            } else if (ball.getLogicPosition().equal(bricksList.getArray(i)[0].getLogicPosition())) {  //reflex in brick
-                bricksList.getArray(i)[0].hide();
-                bricksList.getArray(i)[1].hide();
-                bricksList.getArray(i)[2].hide();
-                bricksList.remove(bricksList.getArray(i));
+            } else if (ball.getLogicPosition().getRow() == table[0].getLogicPosition().getRow() - 1 &&
+                    ball.getLogicPosition().getCol() == table[0].getLogicPosition().getCol() - 1) {
                 return true;
 
-            } else if (ball.getLogicPosition().equal(bricksList.getArray(i)[1].getLogicPosition())) {
-                bricksList.getArray(i)[0].hide();
-                bricksList.getArray(i)[1].hide();
-                bricksList.getArray(i)[2].hide();
-                bricksList.remove(bricksList.getArray(i));
-                return true;
-
-            } else if (ball.getLogicPosition().equal(bricksList.getArray(i)[2].getLogicPosition())) {
-                bricksList.getArray(i)[0].hide();
-                bricksList.getArray(i)[1].hide();
-                bricksList.getArray(i)[2].hide();
-                bricksList.remove(bricksList.getArray(i));
+            } else if (ball.getLogicPosition().getRow() == table[table.length - 1].getLogicPosition().getRow() - 1 &&
+                    ball.getLogicPosition().getCol() == table[table.length - 1].getLogicPosition().getCol() + 1) {
                 return true;
             }
         }
         return false;
     }
 
+    private boolean isBallCollision() {
+
+        for (int i = 0; i < bricksList.size(); i++) {
+
+
+            for (int z = 0; z < bricksList.get(i).length; z++) {
+
+                if ((ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() + 1 ||
+                        ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() - 1) &&
+                        ball.getLogicPosition().getCol() == bricksList.get(i)[z].getLogicPosition().getCol()) {
+                    hideBricks(i);
+                    return true;
+
+                } else if (ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() &&
+                        (ball.getLogicPosition().getCol() == bricksList.get(i)[0].getLogicPosition().getCol() - 1 ||
+                                ball.getLogicPosition().getCol() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getCol() + 1)) {
+                    hideBricks(i);
+                    return true;
+
+                } else if (ball.getLogicPosition().getRow() == bricksList.get(i)[0].getLogicPosition().getRow() - 1 &&
+                        ball.getLogicPosition().getCol() == bricksList.get(i)[0].getLogicPosition().getCol() - 1 ||
+
+                        ball.getLogicPosition().getRow() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getRow() - 1 &&
+                                ball.getLogicPosition().getCol() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getCol() + 1 ||
+
+                        ball.getLogicPosition().getRow() == bricksList.get(i)[0].getLogicPosition().getRow() + 1 &&
+                                ball.getLogicPosition().getCol() == bricksList.get(i)[0].getLogicPosition().getCol() - 1 ||
+
+                        ball.getLogicPosition().getRow() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getRow() + 1 &&
+                                ball.getLogicPosition().getCol() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getCol() + 1) {
+
+                    hideBricks(i);
+                    return true;
+                }
+            }
+
+            if (ball.getLogicPosition().getRow() == 0) { //reflex in celing
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public void hideBricks(int index) {
+
+        for (int i = 0; i < bricks.length; i++) {
+
+            bricksList.get(index)[i].hide();
+        }
+
+        bricksList.remove(bricksList.get(index));
+    }
+
 
     public void tableMove() throws InterruptedException {
 
-        table[0].keyboardInit();
-        table[1].keyboardInit();
-        table[2].keyboardInit();
-        table[3].keyboardInit();
-        table[4].keyboardInit();
+        for (int i = 0; i < table.length; i++) {
+            table[i].keyboardInit();
+        }
     }
 
 
     public void ballMove() throws InterruptedException {
 
-        ball.move(ball.getDirection().oppositeDirection());
+        ball.move(ball.getDirection().oppositeDirectionBricks());
         Thread.sleep(DELAY);
     }
 
