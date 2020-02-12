@@ -1,5 +1,6 @@
 package org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid;
 
+import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Ball;
 import org.academiadecodigo.rhastafaris.brickdestroyer.logicgrid.LogicPosition;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
@@ -21,9 +22,7 @@ public class GraphicPosition extends LogicPosition {
 
     @Override
     public void show() {
-
-        this.rectangle.setColor(Color.RED);
-        this.rectangle.fill();
+        this.rectangle.draw();
 
     }
 
@@ -45,5 +44,11 @@ public class GraphicPosition extends LogicPosition {
         super.moveInDirection(direction, distance);
 
         this.rectangle.translate(graphicGrid.getCellSize() * (super.getCol() - initialCol), graphicGrid.getCellSize() * (super.getRow() - initialRow));
+    }
+
+    @Override
+    public void setColor(Color color) {
+        rectangle.setColor(color);
+        super.setColor(color);
     }
 }

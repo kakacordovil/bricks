@@ -1,12 +1,15 @@
 package org.academiadecodigo.rhastafaris.brickdestroyer.logicgrid;
 
 import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GraphicGrid;
-import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GraphicPosition;
 import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GridDirection;
+import org.academiadecodigo.simplegraphics.graphics.Color;
 
 public abstract class LogicPosition implements Positionable {
     private int col;
     private int row;
+    private int nextCol;
+    private int nextRow;
+    private Color color;
 
     // private GridColor color;
     private GraphicGrid grid;
@@ -21,15 +24,29 @@ public abstract class LogicPosition implements Positionable {
     public LogicPosition(int col, int row, GraphicGrid grid) {
         this.col = col;
         this.row = row;
-
         this.grid = grid;
-        // this.color = GridColor.NOCOLOR;
+        this.nextCol = 0;
+        this.nextRow = 0;
+        this.color = Color.ORANGE;
     }
 
-    public boolean equal (LogicPosition position) {
+    public void setNextPos(int col, int row){
+        this.nextCol = col;
+        this.nextRow = row;
+    }
+
+    public int getNextCol() {
+        return nextCol;
+    }
+
+    public int getNextRow() {
+        return nextRow;
+    }
+
+    /*public boolean equals(LogicPosition position) {
 
         return this.col == position.getCol() && this.row == position.getRow();
-    }
+    }*/
 
     public GraphicGrid getGrid() {
         return grid;
@@ -55,6 +72,15 @@ public abstract class LogicPosition implements Positionable {
 
     public int getRow() {
         return row;
+    }
+
+    /**
+     * @see GridPosition#setColor(GridColor)
+     */
+
+    public void setColor(Color color) {
+        this.color = color;
+        show();
     }
 
     public void moveInDirection(GridDirection direction, int distance) {
@@ -95,9 +121,13 @@ public abstract class LogicPosition implements Positionable {
      * @param dist the number of positions to move
      */
     private void moveUp(int dist) {
-
+        // current move
         int maxRowsUp = dist < getRow() ? dist : getRow();
         setPos(getCol(), getRow() - maxRowsUp);
+
+        // next move
+        maxRowsUp = dist < getRow() ? dist : getRow();
+        setNextPos(getCol(), getRow() - maxRowsUp);
 
     }
 
@@ -107,9 +137,13 @@ public abstract class LogicPosition implements Positionable {
      * @param dist the number of positions to move
      */
     private void moveDown(int dist) {
-
+        // current move
         int maxRowsDown = dist > getGrid().getRows() - (getRow() + 1) ? getGrid().getRows() - (getRow() + 1) : dist;
         setPos(getCol(), getRow() + maxRowsDown);
+
+        // next move
+        maxRowsDown = dist > getGrid().getRows() - (getRow() + 1) ? getGrid().getRows() - (getRow() + 1) : dist;
+        setNextPos(getCol(), getRow() + maxRowsDown);
 
     }
 
@@ -119,10 +153,13 @@ public abstract class LogicPosition implements Positionable {
      * @param dist the number of positions to move
      */
     private void moveLeft(int dist) {
-
+        // current move
         int maxRowsLeft = dist < getCol() ? dist : getCol();
         setPos(getCol() - maxRowsLeft, getRow());
 
+        // next move
+        maxRowsLeft = dist < getCol() ? dist : getCol();
+        setNextPos(getCol() - maxRowsLeft, getRow());
     }
 
     /**
@@ -131,35 +168,64 @@ public abstract class LogicPosition implements Positionable {
      * @param dist the number of positions to move
      */
     private void moveRight(int dist) {
+        // current move
         int maxRowsRight = dist > getGrid().getCols() - (getCol() + 1) ? getGrid().getCols() - (getCol() + 1) : dist;
         setPos(getCol() + maxRowsRight, getRow());
+
+        // next move
+        maxRowsRight = dist > getGrid().getCols() - (getCol() + 1) ? getGrid().getCols() - (getCol() + 1) : dist;
+        setNextPos(getCol() + maxRowsRight, getRow());
     }
+
 
     private void moveUpLeft(int dist) {
+        // current move
         int maxRowsUp = dist < getRow() ? dist : getRow();
-        setPos(getCol(), getRow() - maxRowsUp);
         int maxRowsLeft = dist < getCol() ? dist : getCol();
-        setPos(getCol() - maxRowsLeft, getRow());
+        setPos(getCol() - maxRowsLeft, getRow() - maxRowsUp);
+
+        // next move
+        maxRowsUp = dist < getRow() ? dist : getRow();
+        maxRowsLeft = dist < getCol() ? dist : getCol();
+        setNextPos(getCol() - maxRowsLeft, getRow() - maxRowsUp);
     }
+
 
     private void moveUpRight(int dist) {
+        // current move
         int maxRowsUp = dist < getRow() ? dist : getRow();
-        setPos(getCol(), getRow() - maxRowsUp);
         int maxRowsRight = dist > getGrid().getCols() - (getCol() + 1) ? getGrid().getCols() - (getCol() + 1) : dist;
-        setPos(getCol() + maxRowsRight, getRow());
+        setPos(getCol() + maxRowsRight, getRow() - maxRowsUp);
+
+        // next move
+        maxRowsUp = dist < getRow() ? dist : getRow();
+        maxRowsRight = dist > getGrid().getCols() - (getCol() + 1) ? getGrid().getCols() - (getCol() + 1) : dist;
+        setNextPos(getCol() + maxRowsRight, getRow() - maxRowsUp);
     }
+
 
     private void moveDownLeft(int dist) {
+        // current move
         int maxRowsDown = dist > getGrid().getRows() - (getRow() + 1) ? getGrid().getRows() - (getRow() + 1) : dist;
-        setPos(getCol(), getRow() + maxRowsDown);
         int maxRowsLeft = dist < getCol() ? dist : getCol();
-        setPos(getCol() - maxRowsLeft, getRow());
+        setPos(getCol() - maxRowsLeft, getRow() + maxRowsDown);
+
+        // next move
+        maxRowsDown = dist > getGrid().getRows() - (getRow() + 1) ? getGrid().getRows() - (getRow() + 1) : dist;
+        maxRowsLeft = dist < getCol() ? dist : getCol();
+        setNextPos(getCol() - maxRowsLeft, getRow() + maxRowsDown);
     }
 
+
     private void moveDownRight(int dist) {
+        // current move
         int maxRowsDown = dist > getGrid().getRows() - (getRow() + 1) ? getGrid().getRows() - (getRow() + 1) : dist;
-        setPos(getCol(), getRow() + maxRowsDown);
         int maxRowsRight = dist > getGrid().getCols() - (getCol() + 1) ? getGrid().getCols() - (getCol() + 1) : dist;
-        setPos(getCol() + maxRowsRight, getRow());
+        setPos(getCol() + maxRowsRight, getRow() + maxRowsDown);
+
+        // next move
+        maxRowsDown = dist > getGrid().getRows() - (getRow() + 1) ? getGrid().getRows() - (getRow() + 1) : dist;
+        maxRowsRight = dist > getGrid().getCols() - (getCol() + 1) ? getGrid().getCols() - (getCol() + 1) : dist;
+        setNextPos(getCol() + maxRowsRight, getRow() + maxRowsDown);
     }
 }

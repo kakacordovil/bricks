@@ -48,7 +48,8 @@ public enum GridDirection {
         return opposite;
     }
 
-    public GridDirection oppositeDirectionWall() {
+    // Opposite Direction Diagonal Bricks + Walls
+    public GridDirection oppositeDirectionDiagonal() {
 
         GridDirection opposite = null;
 
@@ -68,16 +69,6 @@ public enum GridDirection {
         }
 
         return opposite;
-    }
-
-    public GridDirection oppositeDirectionTableLeft() {
-
-        return UP_LEFT;
-    }
-
-    public GridDirection oppositeDirectionTableRight() {
-
-        return UP_RIGHT;
     }
 
 }

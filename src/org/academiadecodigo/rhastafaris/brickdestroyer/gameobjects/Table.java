@@ -3,6 +3,7 @@ package org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects;
 import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GraphicGrid;
 import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GridDirection;
 import org.academiadecodigo.rhastafaris.brickdestroyer.logicgrid.LogicPosition;
+import org.academiadecodigo.simplegraphics.graphics.Color;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
@@ -13,9 +14,11 @@ public class Table implements KeyboardHandler {
 
     private LogicPosition logicPosition;
     private GraphicGrid grid;
+    private Color color;
 
     public Table (LogicPosition position) {
         this.logicPosition = position;
+        this.logicPosition.setColor(Color.RED);
 
     }
 

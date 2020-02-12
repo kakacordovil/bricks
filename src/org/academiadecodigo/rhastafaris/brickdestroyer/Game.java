@@ -6,6 +6,7 @@ import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Ball;
 import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Brick;
 import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Table;
 import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GraphicGrid;
+import org.academiadecodigo.rhastafaris.brickdestroyer.graphicgrid.GridDirection;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
@@ -16,7 +17,7 @@ public class Game implements KeyboardHandler {
 
     private static int GRID_COLUMNS = 40;
     private static int GRID_ROWS = 30;
-    private static int DELAY = 100;
+    private int delay = 100;
     private GraphicGrid grid;
     private Ball ball;
     //private Brick brick;
@@ -37,13 +38,17 @@ public class Game implements KeyboardHandler {
         this.grid.init(); // inicialização da grid;
 
         // inicializar Tijolos && Table
-        Table t1 = new Table(grid.makeGridPosition(18, 25));
-        Table t2 = new Table(grid.makeGridPosition(19, 25));
-        Table t3 = new Table(grid.makeGridPosition(20, 25));
-        Table t4 = new Table(grid.makeGridPosition(21, 25));
-        Table t5 = new Table(grid.makeGridPosition(22, 25));
+        Table t1 = new Table(grid.makeGridPosition(16, 25));
+        Table t2 = new Table(grid.makeGridPosition(17, 25));
+        Table t3 = new Table(grid.makeGridPosition(18, 25));
+        Table t4 = new Table(grid.makeGridPosition(19, 25));
+        Table t5 = new Table(grid.makeGridPosition(20, 25));
+        Table t6 = new Table(grid.makeGridPosition(21, 25));
+        Table t7 = new Table(grid.makeGridPosition(22, 25));
+        Table t8 = new Table(grid.makeGridPosition(23, 25));
+        Table t9 = new Table(grid.makeGridPosition(24, 25));
 
-        this.table = new Table[]{t1, t2, t3, t4, t5};
+        this.table = new Table[]{t1, t2, t3, t4, t5, t6, t7, t8, t9};
 
         this.bricksList = new LinkedList<>();
 
@@ -77,39 +82,49 @@ public class Game implements KeyboardHandler {
 
                 ball.move(ball.getDirection());
 
-                Thread.sleep(DELAY);
+                Thread.sleep(delay);
 
                 if (isBallCollision()) {
                     ball.setDirection(ball.getDirection().oppositeDirectionBricks());
+                    continue;
                 }
 
-                // int index = isTableCollision();
+                if (isBallCollisionDiagonal()) {
+                    ball.setDirection(ball.getDirection().oppositeDirectionDiagonal());
+                    continue;
+                }
 
                 if (isTableCollision()) {
 
-                    if (ball.getLogicPosition().getCol() < table[2].getLogicPosition().getCol()){
-                        ball.setDirection(ball.getDirection().oppositeDirectionTableLeft());
-
-                    }
-
-                    if (ball.getLogicPosition().getCol() > table[2].getLogicPosition().getCol()){
-                        ball.setDirection(ball.getDirection().oppositeDirectionTableRight());
-
-                    }
-
                     ball.setDirection(ball.getDirection().oppositeDirectionBricks());
+
+                    if (ball.getLogicPosition().getCol() < table[table.length / 2].getLogicPosition().getCol()) {
+
+                        ball.setDirection(GridDirection.UP_LEFT);
+                    }
+
+                    if (ball.getLogicPosition().getCol() > table[table.length / 2].getLogicPosition().getCol()) {
+
+                        ball.setDirection(GridDirection.UP_RIGHT);
+                    }
+
+                    delay -= 2;
+                    continue;
 
                 }
 
 
                 if (isCrashedWalls()) {
-                    ball.setDirection(ball.getDirection().oppositeDirectionWall());
+                    ball.setDirection(ball.getDirection().oppositeDirectionDiagonal());
+                    continue;
                 }
 
                 if (ball.getLogicPosition().getRow() == GRID_ROWS - 1) {
                     youMove = false;
                     ball.getLogicPosition().hide();
+                    continue;
                 }
+
             }
 
             if (--life == 0) {
@@ -119,13 +134,13 @@ public class Game implements KeyboardHandler {
             newGame();
 
         }
-
     }
+
 
     public boolean newGame() throws InterruptedException {
 
         while (!space) {
-            Thread.sleep(DELAY);
+            Thread.sleep(delay);
         }
 
         space = false;
@@ -148,7 +163,9 @@ public class Game implements KeyboardHandler {
         return false;
     }
 
+
     private boolean isTableCollision() {
+
         for (int z = 0; z < table.length; z++) {
 
             if (ball.getLogicPosition().getRow() == table[z].getLogicPosition().getRow() - 1 &&
@@ -167,6 +184,7 @@ public class Game implements KeyboardHandler {
         return false;
     }
 
+
     private boolean isBallCollision() {
 
         for (int i = 0; i < bricksList.size(); i++) {
@@ -174,43 +192,65 @@ public class Game implements KeyboardHandler {
 
             for (int z = 0; z < bricksList.get(i).length; z++) {
 
-                if ((ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() + 1 ||
-                        ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() - 1) &&
+                // Superior - Inferior Bricks Collision
+                if ((ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() - 1 ||
+                        ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() + 1) &&
                         ball.getLogicPosition().getCol() == bricksList.get(i)[z].getLogicPosition().getCol()) {
                     hideBricks(i);
                     return true;
+                }
 
-                } else if (ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() &&
+                /*
+
+                // Right - Left Bricks Collision
+                if (ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() &&
                         (ball.getLogicPosition().getCol() == bricksList.get(i)[0].getLogicPosition().getCol() - 1 ||
                                 ball.getLogicPosition().getCol() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getCol() + 1)) {
                     hideBricks(i);
                     return true;
 
-                } else if (ball.getLogicPosition().getRow() == bricksList.get(i)[0].getLogicPosition().getRow() - 1 &&
-                        ball.getLogicPosition().getCol() == bricksList.get(i)[0].getLogicPosition().getCol() - 1 ||
+                }*/
 
-                        ball.getLogicPosition().getRow() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getRow() - 1 &&
-                                ball.getLogicPosition().getCol() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getCol() + 1 ||
 
-                        ball.getLogicPosition().getRow() == bricksList.get(i)[0].getLogicPosition().getRow() + 1 &&
-                                ball.getLogicPosition().getCol() == bricksList.get(i)[0].getLogicPosition().getCol() - 1 ||
+                /*if (ball.getLogicPosition().getNextRow() == bricksList.get(i)[z].getLogicPosition().getRow() &&
+                        ball.getLogicPosition().getNextCol() == bricksList.get(i)[z].getLogicPosition().getCol() ||
 
-                        ball.getLogicPosition().getRow() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getRow() + 1 &&
-                                ball.getLogicPosition().getCol() == bricksList.get(i)[bricksList.get(i).length - 1].getLogicPosition().getCol() + 1) {
+                        ball.getLogicPosition().getRow() == bricksList.get(i)[z].getLogicPosition().getRow() &&
+                        ball.getLogicPosition().getCol() == bricksList.get(i)[z].getLogicPosition().getCol()) {
+
+                    hideBricks(i);
+                    return true;
+                }*/
+            }
+        }
+
+        if (ball.getLogicPosition().getRow() == 0) { //reflex in celing
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isBallCollisionDiagonal() {
+
+        for (int i = 0; i < bricksList.size(); i++) {
+
+
+            for (int z = 0; z < bricksList.get(i).length; z++) {
+
+                // Diagonal Bricks Collision
+                if (ball.getLogicPosition().getNextRow() == bricksList.get(i)[z].getLogicPosition().getRow() &&
+                        ball.getLogicPosition().getNextCol() == bricksList.get(i)[z].getLogicPosition().getCol()) {
 
                     hideBricks(i);
                     return true;
                 }
             }
-
-            if (ball.getLogicPosition().getRow() == 0) { //reflex in celing
-                return true;
-            }
         }
 
         return false;
-
     }
+
 
     public void hideBricks(int index) {
 
@@ -231,12 +271,6 @@ public class Game implements KeyboardHandler {
     }
 
 
-    public void ballMove() throws InterruptedException {
-
-        ball.move(ball.getDirection().oppositeDirectionBricks());
-        Thread.sleep(DELAY);
-    }
-
     public void exit() {
     }
 
@@ -248,7 +282,6 @@ public class Game implements KeyboardHandler {
         KeyboardEvent spacePressed = new KeyboardEvent();
         spacePressed.setKey(KeyboardEvent.KEY_SPACE);
         spacePressed.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
-
 
         keyboard.addEventListener(spacePressed);
     }
@@ -267,6 +300,7 @@ public class Game implements KeyboardHandler {
                 break;
         }
     }
+
 
     @Override
     public void keyReleased(KeyboardEvent keyboardEvent) {
