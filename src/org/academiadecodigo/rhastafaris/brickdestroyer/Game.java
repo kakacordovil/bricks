@@ -1,7 +1,6 @@
 package org.academiadecodigo.rhastafaris.brickdestroyer;
 
 
-import org.academiadecodigo.rhashtafaris.linkedlist.LinkedList;
 import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Ball;
 import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Brick;
 import org.academiadecodigo.rhastafaris.brickdestroyer.gameobjects.Table;
@@ -11,6 +10,8 @@ import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
+
+import java.util.LinkedList;
 
 
 public class Game implements KeyboardHandler {
@@ -38,15 +39,15 @@ public class Game implements KeyboardHandler {
         this.grid.init(); // inicialização da grid;
 
         // inicializar Tijolos && Table
-        Table t1 = new Table(grid.makeGridPosition(16, 25));
-        Table t2 = new Table(grid.makeGridPosition(17, 25));
-        Table t3 = new Table(grid.makeGridPosition(18, 25));
-        Table t4 = new Table(grid.makeGridPosition(19, 25));
-        Table t5 = new Table(grid.makeGridPosition(20, 25));
-        Table t6 = new Table(grid.makeGridPosition(21, 25));
-        Table t7 = new Table(grid.makeGridPosition(22, 25));
-        Table t8 = new Table(grid.makeGridPosition(23, 25));
-        Table t9 = new Table(grid.makeGridPosition(24, 25));
+        Table t1 = new Table(grid.makeGridPosition(16, 25), 0, GRID_COLUMNS - 9);
+        Table t2 = new Table(grid.makeGridPosition(17, 25), 1, GRID_COLUMNS - 8);
+        Table t3 = new Table(grid.makeGridPosition(18, 25), 2, GRID_COLUMNS - 7);
+        Table t4 = new Table(grid.makeGridPosition(19, 25), 3, GRID_COLUMNS - 6);
+        Table t5 = new Table(grid.makeGridPosition(20, 25), 4, GRID_COLUMNS - 5);
+        Table t6 = new Table(grid.makeGridPosition(21, 25), 5, GRID_COLUMNS - 4);
+        Table t7 = new Table(grid.makeGridPosition(22, 25), 6, GRID_COLUMNS - 3);
+        Table t8 = new Table(grid.makeGridPosition(23, 25), 7, GRID_COLUMNS - 2);
+        Table t9 = new Table(grid.makeGridPosition(24, 25), 8, GRID_COLUMNS - 1);
 
         this.table = new Table[]{t1, t2, t3, t4, t5, t6, t7, t8, t9};
 

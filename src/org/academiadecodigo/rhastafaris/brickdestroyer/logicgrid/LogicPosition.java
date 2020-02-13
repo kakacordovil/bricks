@@ -74,9 +74,6 @@ public abstract class LogicPosition implements Positionable {
         return row;
     }
 
-    /**
-     * @see GridPosition#setColor(GridColor)
-     */
 
     public void setColor(Color color) {
         this.color = color;
@@ -93,12 +90,6 @@ public abstract class LogicPosition implements Positionable {
             case DOWN:
                 moveDown(distance);
                 break;
-            case LEFT:
-                moveLeft(distance);
-                break;
-            case RIGHT:
-                moveRight(distance);
-                break;
             case UP_LEFT:
                 moveUpLeft(distance);
                 break;
@@ -110,6 +101,20 @@ public abstract class LogicPosition implements Positionable {
                 break;
             case DOWN_RIGHT:
                 moveDownRight(distance);
+                break;
+        }
+
+    }
+
+    public void moveTableInDirection(GridDirection direction, int distance, int min, int max) {
+
+        switch (direction) {
+
+            case LEFT:
+                moveLeft(distance, min);
+                break;
+            case RIGHT:
+                moveRight(distance, max);
                 break;
         }
 
@@ -152,14 +157,15 @@ public abstract class LogicPosition implements Positionable {
      *
      * @param dist the number of positions to move
      */
-    private void moveLeft(int dist) {
+    private void moveLeft(int dist, int min) {
         // current move
+        if(getCol() <= min + dist){
+            setPos(min, getRow());
+            return;
+        }
         int maxRowsLeft = dist < getCol() ? dist : getCol();
         setPos(getCol() - maxRowsLeft, getRow());
 
-        // next move
-        maxRowsLeft = dist < getCol() ? dist : getCol();
-        setNextPos(getCol() - maxRowsLeft, getRow());
     }
 
     /**
@@ -167,14 +173,15 @@ public abstract class LogicPosition implements Positionable {
      *
      * @param dist the number of positions to move
      */
-    private void moveRight(int dist) {
+    private void moveRight(int dist, int max) {
         // current move
+        if(getCol() >= max - dist){
+            setPos(max, getRow());
+            return;
+        }
         int maxRowsRight = dist > getGrid().getCols() - (getCol() + 1) ? getGrid().getCols() - (getCol() + 1) : dist;
         setPos(getCol() + maxRowsRight, getRow());
 
-        // next move
-        maxRowsRight = dist > getGrid().getCols() - (getCol() + 1) ? getGrid().getCols() - (getCol() + 1) : dist;
-        setNextPos(getCol() + maxRowsRight, getRow());
     }
 
 

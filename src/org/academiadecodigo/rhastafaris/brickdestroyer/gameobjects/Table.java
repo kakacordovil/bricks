@@ -15,15 +15,18 @@ public class Table implements KeyboardHandler {
     private LogicPosition logicPosition;
     private GraphicGrid grid;
     private Color color;
+    private int minimum;
+    private int maximum;
 
-    public Table (LogicPosition position) {
+    public Table (LogicPosition position, int min, int max) {
         this.logicPosition = position;
         this.logicPosition.setColor(Color.RED);
-
+        this.minimum = min;
+        this.maximum = max;
     }
 
     public void move(GridDirection direction){
-        logicPosition.moveInDirection(direction, 3);
+        logicPosition.moveTableInDirection(direction, 3, this.minimum, this.maximum);
     }
 
     public LogicPosition getLogicPosition() {

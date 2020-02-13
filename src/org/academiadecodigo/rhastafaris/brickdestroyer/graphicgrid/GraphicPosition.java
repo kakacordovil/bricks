@@ -47,6 +47,16 @@ public class GraphicPosition extends LogicPosition {
     }
 
     @Override
+    public void moveTableInDirection(GridDirection direction, int distance, int min, int max) {
+        int initialCol = super.getCol();
+        int initialRow = super.getRow();
+
+        super.moveTableInDirection(direction, distance, min, max);
+
+        this.rectangle.translate(graphicGrid.getCellSize() * (super.getCol() - initialCol), graphicGrid.getCellSize() * (super.getRow() - initialRow));
+    }
+
+    @Override
     public void setColor(Color color) {
         rectangle.setColor(color);
         super.setColor(color);

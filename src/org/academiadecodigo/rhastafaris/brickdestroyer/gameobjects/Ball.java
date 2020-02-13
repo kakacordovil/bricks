@@ -12,7 +12,7 @@ public class Ball {
     // private GraphicGrid grid;
     // private GraphicPosition graphicPosition;
     private GridDirection direction;
-    private Color color;
+    // private Color color;
 
     public Ball(LogicPosition position){
         this.logicPosition = position;
