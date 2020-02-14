@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="simplegraphics" level="project" />
+    <orderEntry type="library" name="simplegraphics" level="project" />
   </component>
 </module>
