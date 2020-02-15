@@ -1,8 +1,7 @@
-package org.academiadecodigo.rhashtafaris.pong.logicgrid;
+package org.academiadecodigo.rhashtafaris.pongtobreak.logicgrid;
 
-import org.academiadecodigo.rhashtafaris.pongtobreak.logicgrid.Positionable;
-import org.academiadecodigo.rhashtafaris.pong.graphicgrid.GraphicGrid;
-import org.academiadecodigo.rhashtafaris.pong.graphicgrid.GridDirection;
+import org.academiadecodigo.rhashtafaris.pongtobreak.graphicgrid.GraphicGrid;
+import org.academiadecodigo.rhashtafaris.pongtobreak.graphicgrid.GridDirection;
 import org.academiadecodigo.simplegraphics.graphics.Color;
 
 public abstract class LogicPosition implements Positionable {
