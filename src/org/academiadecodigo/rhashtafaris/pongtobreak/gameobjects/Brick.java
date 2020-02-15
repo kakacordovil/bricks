@@ -13,7 +13,7 @@ public class Brick {
 
     public Brick(LogicPosition position) {
         this.logicPosition = position;
-        this.logicPosition.setColor(Color.GREEN);
+        this.logicPosition.setColor(Color.BLACK);
     }
 
     public LogicPosition getLogicPosition() {
