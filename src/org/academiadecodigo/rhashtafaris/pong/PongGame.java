@@ -6,6 +6,8 @@ import org.academiadecodigo.rhashtafaris.pong.gameobjects.Brick;
 import org.academiadecodigo.rhashtafaris.pong.gameobjects.Table;
 import org.academiadecodigo.rhashtafaris.pong.graphicgrid.GraphicGrid;
 import org.academiadecodigo.rhashtafaris.pong.graphicgrid.GridDirection;
+import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
@@ -14,7 +16,7 @@ import org.academiadecodigo.simplegraphics.keyboard.KeyboardHandler;
 import java.util.LinkedList;
 
 
-public class Game implements KeyboardHandler {
+public class PongGame implements KeyboardHandler {
 
     final static int GRID_COLUMNS = 40;
     final static int GRID_ROWS = 30;
@@ -31,9 +33,13 @@ public class Game implements KeyboardHandler {
     private boolean youMove;
     private LinkedList<Brick[]> bricksList;
     private boolean space = false;
+    //private Score score = new Score();
 
 
-    public Game() {
+
+
+
+    public PongGame() {
         this.grid = new GraphicGrid(GRID_COLUMNS, GRID_ROWS);  // INICIALIZAR QUADRO DE JOGO
         this.table = new Table[TABLE_WIDTH]; // INICIALIZAR PADDLE
         this.bricksList = new LinkedList<>();  // INICIALIZAR LISTA DE BRICKS

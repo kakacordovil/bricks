@@ -33,6 +33,9 @@ public class Table2 implements KeyboardHandler {
         return this.logicPosition;
     }
 
+    public void setLogicPosition(LogicPosition logicPosition) {
+        this.logicPosition = logicPosition;
+    }
 
     public void keyboardInit() {
 

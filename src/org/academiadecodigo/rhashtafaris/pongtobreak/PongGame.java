@@ -7,6 +7,8 @@ import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Table;
 import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Table2;
 import org.academiadecodigo.rhashtafaris.pongtobreak.graphicgrid.GraphicGrid;
 import org.academiadecodigo.rhashtafaris.pongtobreak.graphicgrid.GridDirection;
+import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
@@ -33,6 +35,7 @@ public class PongGame implements KeyboardHandler {
     private boolean youMove;
     private LinkedList<Brick[]> bricksList;
     private boolean space = false;
+    private Text score;
 
 
     public PongGame() {
@@ -46,6 +49,12 @@ public class PongGame implements KeyboardHandler {
 
         // inicialização da grid;
         this.grid.init();
+
+//        String text= "Score";
+//        score = new Text(20, 20, text);
+//        score.setColor(Color.BLUE);
+//
+//        score.draw();
 
 
         // inicializar Tijolos && Table

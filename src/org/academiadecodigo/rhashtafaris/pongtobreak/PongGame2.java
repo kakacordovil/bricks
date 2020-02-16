@@ -1,9 +1,6 @@
 package org.academiadecodigo.rhashtafaris.pongtobreak;
 
-import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Ball;
-import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Brick;
-import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Table;
-import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Table2;
+import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.*;
 import org.academiadecodigo.rhashtafaris.pongtobreak.graphicgrid.GraphicGrid;
 import org.academiadecodigo.rhashtafaris.pongtobreak.graphicgrid.GridDirection;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
@@ -37,12 +34,15 @@ public class PongGame2 implements KeyboardHandler {
     private LinkedList<Brick[]> bricksList;
     private boolean space = false;
 
+    private Score score;
+
 
     public PongGame2() {
         this.grid = new GraphicGrid(GRID_COLUMNS, GRID_ROWS);  // INICIALIZAR QUADRO DE JOGO
         this.table1 = new Table[TABLE_WIDTH]; // INICIALIZAR PADDLE
         this.table2 = new  Table2[TABLE2_WIDTH]; // **SECOND TABLE **
         this.bricksList = new LinkedList<>();  // INICIALIZAR LISTA DE BRICKS
+
     }
 
 
@@ -53,21 +53,9 @@ public class PongGame2 implements KeyboardHandler {
 
         initTables();
 
-//        // INICIALIZAR TODOS OS BRICKS POR: ROW -> BRICK -> CÉLULA + Adicionar Brick ao LinkedList;
-//        for (int z = 0; z < BRICKS_QTITY_ROWS; z++) {
-//
-//            for (int i = 0; i < (GRID_COLUMNS / BRICKS_WIDTH); i++) {
-//
-//                bricks = new Brick[BRICKS_WIDTH];
-//
-//                for(int x = 0; x < BRICKS_WIDTH; x++){
-//
-//                    //bricks[x] = new Brick(grid.makeGridPosition(i * BRICKS_WIDTH + x, z));
-//                }
-//
-//                //bricksList.add(bricks);
-//            }
-//        }
+
+
+
     }
 
     private void initTables() {
@@ -81,6 +69,7 @@ public class PongGame2 implements KeyboardHandler {
         }
 
         // inicializar Table2
+
         int initialColTable2 = (GRID_COLUMNS / 2) - (int) Math.floor(TABLE2_WIDTH / 2);
 
         for(int i = 0; i < this.table2.length; i++){
@@ -89,12 +78,16 @@ public class PongGame2 implements KeyboardHandler {
             table2[i] = new Table2(grid.makeGridPosition(initialColTable2 + i, TABLE2_ROW), i,
                     GRID_COLUMNS - TABLE2_WIDTH + i);
         }
+
     }
 
 
     public void play() throws InterruptedException {
 
-        int life = 3;
+        int round = 5;
+        int showRound = 0;
+        int player1Wins = 0;
+        int player2Wins = 0;
 
         // Inicializar KeyBoard Table
         for (int i = 0; i < TABLE_WIDTH; i++) {
@@ -185,23 +178,30 @@ public class PongGame2 implements KeyboardHandler {
                 if (ball.getLogicPosition().getRow() == GRID_ROWS - 1) {
                     youMove = false;
                     ball.getLogicPosition().hide();
+                    ++player2Wins;
                     continue;
                 }
 
                 if (ball.getLogicPosition().getRow() == 0 ) {
                     youMove = false;
                     ball.getLogicPosition().hide();
+                    ++player1Wins;
                     continue;
                 }
 
             }
 
+            System.out.println("\033[35mROUND "+ ++showRound);
+            System.out.println("Player 1: " + player1Wins);
+            System.out.println("Player 2: " + player2Wins);
 
-            if (--life == 0) {
-                break;
+            if (--round == 0) {
+            break;
             }
 
+
             reStart();
+
         }
     }
 
@@ -214,10 +214,26 @@ public class PongGame2 implements KeyboardHandler {
             Thread.sleep(delay);
         }
 
-//        int initialColTable2 = 0;
-//        for(Table2 table: table2) {
-//            table.getLogicPosition().setPos(17,10);
-//        }
+//        table1[0].getLogicPosition().setPos(17, 25);
+//        table1[1].getLogicPosition().setPos(18, 25);
+//        table1[2].getLogicPosition().setPos(19,25);
+//        table1[3].getLogicPosition().setPos(20, 25);
+//        table1[4].getLogicPosition().setPos(21, 25);
+//        table1[5].getLogicPosition().setPos(22,25);
+//        table1[6].getLogicPosition().setPos(23, 25);
+//        //initTables();
+////
+////        int initialColTable2 = (GRID_COLUMNS / 2) - (int) Math.floor(TABLE2_WIDTH / 2);
+////
+////        for(int i = 0; i < this.table2.length; i++){
+////
+////            // Make Grid Position Center + Minimum Column Limit + Maximum Column Limit
+////            table2[i].setLogicPosition(grid.makeGridPosition(initialColTable2 + i, TABLE2_ROW));
+////
+////
+//////                    new Table2(grid.makeGridPosition(initialColTable2 + i, TABLE2_ROW), i,
+//////                    GRID_COLUMNS - TABLE2_WIDTH + i);}
+
         space = false;
         return true;
     }
@@ -236,6 +252,8 @@ public class PongGame2 implements KeyboardHandler {
         spacePressed.setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
 
         keyboard.addEventListener(spacePressed);
+
+
     }
 
 

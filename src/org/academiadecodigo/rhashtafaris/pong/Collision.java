@@ -26,7 +26,7 @@ public class Collision {
             if (ball.getLogicPosition().getCol() == 0) { //reflex in right walll
                 return true;
 
-            } else if (ball.getLogicPosition().getCol() == Game.GRID_COLUMNS - 1) { //reflex in left wall
+            } else if (ball.getLogicPosition().getCol() == PongGame.GRID_COLUMNS - 1) { //reflex in left wall
                 return true;
             }
         }
@@ -103,7 +103,7 @@ public class Collision {
 
     public void hideBricks(int index) {
 
-        for (int i = 0; i < Game.BRICKS_WIDTH; i++) {
+        for (int i = 0; i < PongGame.BRICKS_WIDTH; i++) {
 
             bricksList.get(index)[i].hide();
         }

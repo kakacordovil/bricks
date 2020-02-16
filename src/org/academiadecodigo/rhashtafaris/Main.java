@@ -1,13 +1,15 @@
 package org.academiadecodigo.rhashtafaris;
 
 import org.academiadecodigo.rhashtafaris.brickdestroyer.Game;
+import org.academiadecodigo.rhashtafaris.pongtobreak.PongGame;
 
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Game game = new Game();
+        //Game game = new Game();
+        PongGame game = new PongGame();
 
         game.init();
 
