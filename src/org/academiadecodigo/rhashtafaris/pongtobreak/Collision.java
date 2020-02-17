@@ -1,5 +1,6 @@
 package org.academiadecodigo.rhashtafaris.pongtobreak;
 
+import org.academiadecodigo.bootcamp.Sound;
 import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Ball;
 import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Brick;
 import org.academiadecodigo.rhashtafaris.pongtobreak.gameobjects.Table;
@@ -13,6 +14,7 @@ public class Collision {
     private LinkedList<Brick[]> bricksList;
     private Table[] table;
     private Table2[] table2;
+    private Sound sound;
 
     
     public Collision(Ball ball, Table[] table, Table2[] table2, LinkedList<Brick[]> bricksList){
@@ -20,6 +22,7 @@ public class Collision {
         this.table = table;
         this.table2 = table2;
         this.bricksList = bricksList;
+        sound = new Sound("/resources/collision.wav");
     }
     
     
@@ -44,14 +47,17 @@ public class Collision {
 
             if (ball.getLogicPosition().getRow() == table[z].getLogicPosition().getRow() - 1 &&
                     ball.getLogicPosition().getCol() == table[z].getLogicPosition().getCol()) {
+                sound.play(true);
                 return true;
 
             } else if (ball.getLogicPosition().getRow() == table[0].getLogicPosition().getRow() - 1 &&
                     ball.getLogicPosition().getCol() == table[0].getLogicPosition().getCol() - 1) {
+                sound.play(true);
                 return true;
 
             } else if (ball.getLogicPosition().getRow() == table[table.length - 1].getLogicPosition().getRow() - 1 &&
                     ball.getLogicPosition().getCol() == table[table.length - 1].getLogicPosition().getCol() + 1) {
+                sound.play(true);
                 return true;
             }
         }
@@ -65,16 +71,19 @@ public class Collision {
 
             if (ball.getLogicPosition().getRow() == table2[z].getLogicPosition().getRow() + 1 &&
                     ball.getLogicPosition().getCol() == table2[z].getLogicPosition().getCol()) {
+                sound.play(true);
                 return true;
 
             } else if (ball.getLogicPosition().getRow() == table2[0].getLogicPosition().getRow() + 1 &&
                     ball.getLogicPosition().getCol() == table2[0].getLogicPosition().getCol() - 1) {
+                sound.play(true);
                 return true;
 
             } else if (ball.getLogicPosition().getRow() == table2[table2.length - 1].getLogicPosition().getRow() + 1 &&
                     ball.getLogicPosition().getCol() == table2[table2.length - 1].getLogicPosition().getCol() + 1)
             // verificar o valor -1 do getCol da linha 75
             {
+                sound.play(true);
                 return true;
             }
         }

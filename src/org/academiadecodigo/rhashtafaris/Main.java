@@ -1,6 +1,5 @@
 package org.academiadecodigo.rhashtafaris;
 
-import org.academiadecodigo.rhashtafaris.brickdestroyer.Game;
 import org.academiadecodigo.rhashtafaris.pongtobreak.PongGame;
 
 

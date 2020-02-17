@@ -22,7 +22,7 @@ public class GraphicPosition extends LogicPosition {
 
     @Override
     public void show() {
-        this.rectangle.draw();
+        this.rectangle.fill();
 
     }
 

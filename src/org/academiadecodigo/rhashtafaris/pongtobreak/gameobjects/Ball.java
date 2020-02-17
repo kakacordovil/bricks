@@ -16,7 +16,8 @@ public class Ball {
     public Ball(LogicPosition position){
         this.logicPosition = position;
         this.direction = GridDirection.DOWN;
-        this.logicPosition.setColor(Color.BLUE);
+        this.logicPosition.setColor(Color.YELLOW);
+
     }
 
     public void move(GridDirection direction){

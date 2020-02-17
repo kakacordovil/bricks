@@ -7,7 +7,7 @@ public class App {
     public static void main(String[] args) {
 
         //PongGame game = new PongGame();
-        PongGame2 game = new PongGame2();
+        PongGame game = new PongGame();
 
         game.init();
 
