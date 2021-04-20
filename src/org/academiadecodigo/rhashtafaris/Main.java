@@ -13,7 +13,7 @@ public class Main {
 
         try {
             game.play();
-            System.out.println("GO FUCK YOURSELF");
+            System.out.println("GO");
 
         } catch (InterruptedException ex){
             System.out.println(ex);
